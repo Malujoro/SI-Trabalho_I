@@ -21,8 +21,8 @@ from math import sqrt
 
 # largura e altura da tela, respectivamente
 tamanho_tela = (1000, 1000)
-raio = 50
-quant_obstaculos = 100
+raio = 30
+quant_obstaculos = 40
 
 def desenhar_circulo(ax, coord, raio, color):
     ax.add_patch(Circle(coord, raio, color=color))
@@ -77,7 +77,7 @@ def mostrar_tela(largura, altura, raio, quant_obstaculos):
             obstaculos.append((larg, alt))
             desenhar_circulo(ax, (larg, alt), raio, "green")
             plt.draw()
-            plt.pause(1)
+            plt.pause(0.5)
 
     print(f"Foram inseridos {quant} obstáculos")
     plt.ioff()
