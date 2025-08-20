@@ -66,7 +66,7 @@ def mostrar_tela(largura, altura, raio, quant_obstaculos):
             coord_x = pow(x - larg, 2)
             coord_y = pow(y - alt, 2)
             result = sqrt(coord_x + coord_y)
-            if (result < (2 * raio)):
+            if (result <= (2 * raio)):
                 print(f"Colidiu {it}")
                 cont += 1
                 break
