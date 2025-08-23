@@ -1,19 +1,3 @@
-# 1 entrega SI (20/04)
-# - Plotagem com ponto inicial e final (fixos/dinâmico) (Ex: (0,0) (1000, 1000))
-
-# Parâmetros
-# - Quantidade de obstáculos
-# - Obstáculos não podem colidir (sobreposição) entre si
-# - Tamanho do raio dos obstáculos (podem ser iguais)
-# * Posição dos obstáculos (deve ser aleatório e dentro do intervalo)
-
-# NÃO DEVE FAZER ❌
-# - Arestas
-# - Com matriz
-
-# Sugestão
-# - Lista com as coordenadas do obstáculo
-
 import matplotlib.pyplot as plt
 from matplotlib.patches import Circle
 from random import randint
@@ -33,7 +17,8 @@ def mostrar_tela(largura, altura, raio, quant_obstaculos):
 
     # Tamanho em polegadas
     polegadas = 100
-    fig, ax = plt.subplots(figsize=(largura / polegadas, altura / polegadas), dpi=polegadas)
+    fig, ax = plt.subplots(
+        figsize=(largura / polegadas, altura / polegadas), dpi=polegadas)
     ax.set_xlim(0, largura)
     ax.set_ylim(0, altura)
 
@@ -51,10 +36,10 @@ def mostrar_tela(largura, altura, raio, quant_obstaculos):
     # Obstaculos
     obstaculos = []
 
+    # Plotagem dos obstáculos
     cont = 0
-    quant = 0
     it = 0
-    while cont < 10_000 and quant < quant_obstaculos:
+    while cont < 10_000 and len(obstaculos) < quant_obstaculos:
         it += 1
         larg = randint(raio, largura - raio)
         alt = randint(raio, altura - raio)
@@ -72,14 +57,34 @@ def mostrar_tela(largura, altura, raio, quant_obstaculos):
                 break
         else:
             cont = 0
-            quant += 1
             print(f"Entrou else {it}")
             obstaculos.append((larg, alt))
             desenhar_circulo(ax, (larg, alt), raio, "green")
             plt.draw()
-            plt.pause(0.5)
+            # plt.pause(0.5)
 
-    print(f"Foram inseridos {quant} obstáculos")
+    print(f"Foram inseridos {len(obstaculos)} obstáculos")
+
+    pontos_obstaculos = []
+    for it, (x, y) in enumerate(obstaculos):
+        # Ponto superior
+        pontos_obstaculos.append((x, y - raio))
+        # Ponto esquerda
+        pontos_obstaculos.append((x - raio, y))
+        # Ponto inferior
+        pontos_obstaculos.append((x, y + raio))
+        # Ponto direita
+        pontos_obstaculos.append((x + raio, y))
+
+        for coord in pontos_obstaculos[it * 4:]:
+            desenhar_circulo(ax, coord, 5, "black")
+
+        print((x, y), end=" ")
+        print((pontos_obstaculos[it * 4:]))
+
+    
+    
+
     plt.ioff()
     plt.show()
 
