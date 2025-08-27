@@ -41,6 +41,51 @@ def colide_segmento_circulo(p1, p2, centro, raio):
 
     return dist < raio
 
+def busca_profundidade(plt, ax, p1, p2, arestas, visitados=[]):
+
+    if ((p1, p2) in arestas or (p2, p1) in arestas):
+        desenhar_aresta(ax, p1, p2, color="black")
+        return True
+
+    visitados.append((p1, p2))
+    # input(f"{p1}, {p2}")
+
+    resultado = False
+    for aresta in arestas:
+        # print(f"{visitados}")
+        # print(f"{aresta} not in |  and ({aresta[1]}, {aresta[0]}) not in | ")
+
+        # input(
+        #     f"{aresta not in visitados and (aresta[1], aresta[0]) not in visitados}")
+
+        # print()
+
+        if (aresta not in visitados and (aresta[1], aresta[0]) not in visitados):
+            if (p1 in aresta):
+
+                # desenhar_aresta(ax, aresta[0], aresta[1], color="blue")
+                visitados.append(aresta)
+
+                if (p1 == aresta[0]):
+                    # print(f"É aresta[0]")
+
+                    visitados.append(aresta)
+
+                    resultado = busca_profundidade(
+                        plt, ax, aresta[1], p2, arestas, visitados)
+                elif (p1 == aresta[1]):
+                    # print(f"É aresta[1]")
+
+                    resultado = busca_profundidade(
+                        plt, ax, aresta[0], p2, arestas, visitados)
+
+            if (resultado):
+                desenhar_aresta(ax, aresta[0], aresta[1], color="black")
+                return resultado
+
+    return False
+
+
 def mostrar_tela(largura, altura, raio, quant_obstaculos):
     # Modo interativo (para ver a geração de cada obstáculo)
     plt.ion()
@@ -56,10 +101,12 @@ def mostrar_tela(largura, altura, raio, quant_obstaculos):
     ax.invert_yaxis()
 
     # Ponto Inicial
-    desenhar_circulo(ax, (0, 0), 10, "red")
+    ponto_inicial = (0, 0)
+    desenhar_circulo(ax, ponto_inicial, 10, "red")
 
     # Ponto Final
-    desenhar_circulo(ax, (largura, altura), 10, "blue")
+    ponto_final = (largura, altura)
+    desenhar_circulo(ax, ponto_final, 10, "blue")
 
     ax.set_title("Busca com obstáculos")
 
@@ -95,6 +142,8 @@ def mostrar_tela(largura, altura, raio, quant_obstaculos):
 
     print(f"Foram inseridos {len(obstaculos)} obstáculos")
 
+    arestas = []
+
     # ================== Plotagem dos pontos ==================
     pontos_obstaculos = []
     for it, (x, y) in enumerate(obstaculos):
@@ -115,9 +164,15 @@ def mostrar_tela(largura, altura, raio, quant_obstaculos):
         for coord in pontos_obstaculos[inicio:]:
             desenhar_circulo(ax, coord, 5, "black")
             if (pos + 1 < tam):
+                arestas.append(
+                    (pontos_obstaculos[pos], pontos_obstaculos[pos + 1]))
+
                 desenhar_aresta(
                     ax, pontos_obstaculos[pos], pontos_obstaculos[pos + 1], "red")
             else:
+                arestas.append(
+                    (pontos_obstaculos[pos], pontos_obstaculos[inicio]))
+
                 desenhar_aresta(
                     ax, pontos_obstaculos[pos], pontos_obstaculos[inicio], "red")
             pos += 1
@@ -131,7 +186,6 @@ def mostrar_tela(largura, altura, raio, quant_obstaculos):
     pontos_obstaculos.append((largura, altura))
 
     # ================== Plotagem das arestas ==================
-    arestas = []
     for i in range(len(pontos_obstaculos)):
         pt1 = pontos_obstaculos[i]
         for j in range(i + 1, len(pontos_obstaculos)):
@@ -144,6 +198,11 @@ def mostrar_tela(largura, altura, raio, quant_obstaculos):
             if (not colidiu):
                 desenhar_aresta(ax, pt1, pt2)
                 arestas.append((pt1, pt2))
+
+    if (busca_profundidade(plt, ax, ponto_inicial, ponto_final, arestas)):
+        print("Encontrou caminho")
+    else:
+        print("Não encontrou caminho")
 
     plt.ioff()
     plt.show()
