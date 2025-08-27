@@ -5,8 +5,8 @@ from math import sqrt
 
 # largura e altura da tela, respectivamente
 tamanho_tela = (1000, 1000)
-raio = 30
-quant_obstaculos = 2
+raio = 100
+quant_obstaculos = 5
 
 def desenhar_circulo(ax, coord, raio, color):
     ax.add_patch(Circle(coord, raio, color=color))
