@@ -18,7 +18,7 @@ def desenhar_circulo(ax, coord, raio, color):
 def desenhar_arco(ax, centro, raio, p1, p2, color="black"):
     x0, y0 = centro
 
-    # Ângulos em radianos → graus
+    # Ângulos em radianos para graus
     ang1 = degrees(atan2(p1[1] - y0, p1[0] - x0)) % 360
     ang2 = degrees(atan2(p2[1] - y0, p2[0] - x0)) % 360
 
